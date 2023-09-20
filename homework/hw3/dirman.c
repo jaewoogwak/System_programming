@@ -21,9 +21,6 @@ char* findCommonPrefix(const char* str1, const char* str2) {
     int len2 = strlen(str2);
     int minLen = (len1 < len2) ? len1 : len2;
 
-    // printf("str1: %s\n", str1);
-    // printf("str2: %s\n", str2);
-
     char* commonPrefix = (char*)malloc(minLen + 1);
     strcpy(commonPrefix, "");
     int i = 0;
@@ -40,7 +37,6 @@ char* findCommonPrefix(const char* str1, const char* str2) {
             i+=1;
             k=0;
         }
-        // printf("res %s \n", commonPrefix);
     }
     return commonPrefix;
 }
@@ -50,7 +46,6 @@ char *make_path(char* tok_str) {
     char *cp = getcwd(NULL, BUFSIZ);
     char *prefix = findCommonPrefix(cp, tok_str);
 
-    // printf("result: %s\n", prefix);
     int len = strlen(prefix);
     int idx = len;
     char *remains = (char*) malloc(MAX_CMD_SIZE);
@@ -82,7 +77,6 @@ char *make_path(char* tok_str) {
     free(prefix);
     free(remains);
 
-    // printf("path %s \n", path);
     return path;
 }
 
@@ -198,18 +192,15 @@ int main(int argc, char **argv)
 
                 // current_dir에 target_path 복사
                 if (strcmp(target_path, "") == 0) {
-                    // current_dir = "/";
                     strcpy(current_dir, "/");
                 } else {
-                    // current_dir = target_path;
                     strcpy(current_dir, target_path);
                 }
-                
                 free(target_path);
-                
                 printf("Success change directory\n");
 
             } else {
+                // 루트보다 상위 경로로 가려할 때
                 printf("Cannot change directory\n");
                 strcpy(current_dir, "/");
                 chdir(REAL_PATH_CONSTANT);
