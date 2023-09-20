@@ -7,7 +7,6 @@
 
 #define MAX_CMD_SIZE (128)
 
-#define ROOT_DIR "/home/ubuntu/tmp/test"
 
 void append(char *dst, char c) {
     char *p = dst;
@@ -90,7 +89,8 @@ char *make_path(char* tok_str) {
 int main(int argc, char **argv)
 {
 	char *command, *tok_str;
-	char *current_dir = "/";
+	char *current_dir = (char*) malloc(MAX_CMD_SIZE);
+    strcpy(current_dir, "/");
     char *REAL_PATH_CONSTANT = getcwd(NULL, BUFSIZ);
     
     // 처음에 ~ 경로로 가서 경로 전체 가져오기
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
             // tok_str이 ~이면 /tmp/test로 바꿔주기
             if (strcmp(tok_str, "~") == 0 || strcmp(tok_str, "/") == 0) {                
                 int result = chdir(REAL_PATH_CONSTANT);
-                current_dir = "/";
+                strcpy(current_dir, "/");
                 if (result == -1) {
                     perror("chdir error");
                     exit(1);
@@ -198,16 +198,20 @@ int main(int argc, char **argv)
 
                 // current_dir에 target_path 복사
                 if (strcmp(target_path, "") == 0) {
-                    current_dir = "/";
+                    // current_dir = "/";
+                    strcpy(current_dir, "/");
                 } else {
-                    current_dir = target_path;
+                    // current_dir = target_path;
+                    strcpy(current_dir, target_path);
                 }
+                
+                free(target_path);
                 
                 printf("Success change directory\n");
 
             } else {
                 printf("Cannot change directory\n");
-                current_dir = "/";
+                strcpy(current_dir, "/");
                 chdir(REAL_PATH_CONSTANT);
                 // real_path도 되돌리기
                 real_path = REAL_PATH_CONSTANT;
@@ -284,7 +288,13 @@ int main(int argc, char **argv)
 
             while ((dent = readdir(dp))) {
                 printf("%-20s", dent->d_name);
-                printf("%-13d", dent->d_type);
+                if (dent->d_type == DT_DIR) {
+                    printf("%-13s", "directory");
+                } else if (dent->d_type == DT_REG) {
+                    printf("%-13s", "regular");
+                } else {
+                    printf("%-13s", "unknown");
+                }
                 printf("%-10d\n", dent->d_reclen);
 
                 
