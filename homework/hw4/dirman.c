@@ -385,7 +385,6 @@ int main(int argc, char **argv)
                 exit(1);
             }
 
-            // File name, File type, File size, UID, GID, Last access time, Last modification time, Last status change time, Hard link count
             printf("File type    File name      size   UID    GID    Last access time          Last modification time    Last status change time    Hlink count  Slink \n");
             printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
@@ -393,7 +392,6 @@ int main(int argc, char **argv)
             {
 
                 stat(dent->d_name, &st);
-                // 파일의 권한은 실제 ls명령과 같이 -rwxrwxrwx 형식으로 출력
                 printf("%c", (S_ISDIR(st.st_mode)) ? 'd' : '-');
                 printf("%c", (st.st_mode & S_IRUSR) ? 'r' : '-');
                 printf("%c", (st.st_mode & S_IWUSR) ? 'w' : '-');
@@ -410,6 +408,7 @@ int main(int argc, char **argv)
                 printf("%-7ld", st.st_size);
                 printf("%-7d", st.st_uid);
                 printf("%-7d", st.st_gid);
+
                 // 파일 접근 생성, 수정 시간을 하나의 문자열로 저장
                 char *access_time = (char *)malloc(MAX_CMD_SIZE);
                 char *modify_time = (char *)malloc(MAX_CMD_SIZE);
@@ -500,6 +499,7 @@ int main(int argc, char **argv)
             }
             else
             {
+                // 역시 old_name, new_name 모두 경로 체크
                 char *old_name = option;
                 // 경로 생성
                 char *path = (char *)malloc(MAX_CMD_SIZE);
