@@ -197,6 +197,7 @@ int main(int argc, char **argv)
             printf("mv: move file\n");
             printf("------------------------------\n");
         }
+        // cd
         else if (strcmp(tok_str, "cd") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -256,10 +257,12 @@ int main(int argc, char **argv)
                 real_path = REAL_PATH_CONSTANT;
             }
         }
+        // pwd
         else if (strcmp(tok_str, "pwd") == 0)
         {
             printf("%s \n", current_dir);
         }
+        // mkdir
         else if (strcmp(tok_str, "mkdir") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -326,6 +329,7 @@ int main(int argc, char **argv)
             free(path);
             printf("Success remove directory\n");
         }
+        // rename
         else if (strcmp(tok_str, "rename") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -371,6 +375,7 @@ int main(int argc, char **argv)
 
             printf("Success rename file\n");
         }
+        // ls
         else if (strcmp(tok_str, "ls") == 0)
         {
             DIR *dp;
@@ -446,7 +451,7 @@ int main(int argc, char **argv)
             printf("Success list files\n");
         }
 
-        // 링크 생성 명령 ln추가
+        // ln
         else if (strcmp(tok_str, "ln") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -544,7 +549,7 @@ int main(int argc, char **argv)
 
             printf("Success link file\n");
         }
-        // 파일 삭제 명령(rm) 추가
+        // rm
         else if (strcmp(tok_str, "rm") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -572,7 +577,7 @@ int main(int argc, char **argv)
             free(path);
             printf("Success remove file\n");
         }
-        // chmod 추가
+        // chmod
         else if (strcmp(tok_str, "chmod") == 0)
         {
             // chmod 777 test.txt, chmod u-x test.txt 둘다 가능하게 하기
@@ -608,6 +613,7 @@ int main(int argc, char **argv)
 
                 printf("Success chmod\n");
             }
+            // 문자면 문자열 파싱
             else
             {
                 // path 저장
@@ -745,6 +751,7 @@ int main(int argc, char **argv)
                         }
                     }
                 }
+                // 앞글자가 +-로 시작하지 않는 경우
                 else
                 {
                     for (int i = 0; i < strlen(user); i++)
@@ -885,7 +892,7 @@ int main(int argc, char **argv)
                 printf("Success chmod\n");
             }
         }
-        // cat 추가
+        // cat
         else if (strcmp(tok_str, "cat") == 0)
         {
             tok_str = strtok(NULL, " \n");
@@ -908,7 +915,7 @@ int main(int argc, char **argv)
             fclose(fp);
             printf("\nSuccess cat\n");
         }
-        // 복사 명령 cp 추가
+        // cp
         else if (strcmp(tok_str, "cp") == 0)
         {
             // old_name부터 검사
@@ -957,7 +964,7 @@ int main(int argc, char **argv)
 
             printf("Success copy file\n");
         }
-        // 이동명령 mv 추가
+        // mv
         else if (strcmp(tok_str, "mv") == 0)
         {
             // old_name부터 검사
