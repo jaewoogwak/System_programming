@@ -1115,7 +1115,7 @@ int main(int argc, char **argv)
             }
 
             // 헤더 출력
-            printf("%-5s %-25s %s\n", "PID", "CMD", "STATE");
+            printf("%-5s %-25s %s\n", "PID", "NAME", "CMDLINE");
 
             // 프로세스 정보 읽기
             while ((entry = readdir(proc_dir)) != NULL)
@@ -1142,13 +1142,36 @@ int main(int argc, char **argv)
                         FILE *stat_file = fopen(stat_path, "r");
                         if (stat_file != NULL)
                         {
+                            // stat 파일에서 프로세스 정보 읽기
                             int pid;
-                            char cmd[256];
+                            char comm[256];
                             char state;
-                            fscanf(stat_file, "%d %s %c", &pid, cmd, &state);
+                            fscanf(stat_file, "%d %s %c", &pid, comm, &state);
                             fclose(stat_file);
 
-                            printf("%-5d %-25s %c\n", pid, cmd, state);
+                            char cmdline_path[256];
+
+                            // 프로세스 Pid, 이름(comm), cmdline
+                            printf("%-5d %-25s ", pid, comm);
+
+                            // cmdline 파일 열기
+                            snprintf(cmdline_path, sizeof(cmdline_path), "/proc/%s/cmdline", entry->d_name);
+                            FILE *cmdline_file = fopen(cmdline_path, "r");
+                            if (cmdline_file != NULL)
+                            {
+                                char cmdline[256];
+                                fgets(cmdline, sizeof(cmdline), cmdline_file);
+                                fclose(cmdline_file);
+
+                                // cmdline에 개행 문자가 있으면 널 문자로 바꿔서 출력
+                                char *pos = strchr(cmdline, '\n');
+                                if (pos != NULL)
+                                {
+                                    *pos = '\0';
+                                }
+
+                                printf("%s\n", cmdline);
+                            }
                         }
                     }
                 }
